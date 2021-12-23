@@ -1,4 +1,4 @@
-  window.onload = setTimeout(main, 250);
+  onload = setTimeout(main, 250);
 
   function main() {
     let numberOfBlocks = 36,
