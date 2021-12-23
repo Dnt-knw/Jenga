@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Jenga Tower...</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js" charset="utf-8"></script>
+    <script src="https://threejs.org/build/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/DragControls.js"></script>
+    <script src="https://threejs.org/examples/js/libs/stats.min.js"></script>
+    <script src="https://threejs.org/examples/js/objects/Reflector.js"></script>
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <div id="main-container">
+      <div class="loading-container">
+        <!-- Icon made by mynamepong from www.flaticon.com -->
+        <img src="https://dl.dropbox.com/s/aud86zpgwp125n2/jenga.png" alt="jenga" />
+        <div id="loader">
+          <p id="progress"></p>
+        </div>
+      </div>
+    </div>
+    <div id="physics-selection-container">
+      <p class="option">Low interaction</p>
+      <p class="option selected">Normal interaction</p>
+      <p class="option">High interaction</p>
+    </div>
+    <button id="restart">Restart</button>
+    <p id="blockNum">Blocks number:</p>
+    <select>
+      <option>24</option>
+      <option selected>36</option>
+      <option>54</option>
+    </select>
+    <canvas id="c"></canvas>
+  </body>
+</html>

@@ -1,0 +1,181 @@
+html, body {
+  position: fixed;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#c {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+}
+
+#main-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: linear-gradient(to top, #000000, #4e4e4e);
+}
+
+.loading-container {
+  position: absolute;
+  background: transparent;
+  width: 70%;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+#loader {
+  position: relative;
+  margin: 0 auto;
+  width: 90%;
+  max-width: 800px;
+  height: 20px;
+  border: 1px solid gray;
+  z-index: 999;
+  padding: 4px;
+}
+
+#progress {
+  position: relative;
+  top: 0;
+  left: 0;
+  background: #7f9897;
+  height: 100%;
+  margin: 0;
+  transform-origin: top left;
+  transform: scaleX(0);
+}
+
+#physics-selection-container {
+  position: relative;
+  width: 110px;
+  height: auto;
+  border: 1px solid gray;
+  top: 0;
+  left: calc(100% - 113px);
+  background: #1a122b;
+  z-index: 999;
+  font-size: 12px;
+}
+
+.option {
+  margin: 0;
+  padding: 5px;
+  border-bottom: 1px solid #5c647d;
+  color: #dbe8ea;
+  text-align: center;
+}
+
+#physics-selection-container :last-child {
+  border: none;
+}
+
+#restart {
+  position: relative;
+  width: 60px;
+  height: 22px;
+  top: 10px;
+  font-size: 11px;
+  border-radius: 5px;
+  left: calc(100% - 85px);
+  background: #4c4c4c;
+  color: #aaa3af;
+  z-index: 999;
+  cursor: pointer;
+}
+
+#restart:hover {
+  background: #312f2f;
+}
+
+.option:hover {
+  cursor: pointer;
+  color: #a6b7b9;
+}
+
+.number-of-blocks:hover {
+  color: #6e848a;
+}
+
+select {
+  cursor: pointer;
+  position: relative;
+  top: 25px;
+  z-index: 999;
+  left: calc(100% - 80px);
+  width: 50px;
+  height: 20px;
+}
+
+#blockNum {
+  position: relative;
+  top: 17px;
+  z-index: 999;
+  text-align: center;
+  width: 110px;
+  margin: 0;
+  white-space: nowrap;
+  color: white;
+  font-size: 14px;
+  left: calc(100% - 110px);
+}
+
+img {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 15px;
+  display: block;
+}
+
+.run-hide-animation {
+  animation: hide .5s ease-in 1;
+}
+
+@keyframes hide {
+  from {opacity: 1}
+  to {opacity: 0}
+}
+
+.selected {
+  background: #474b65;
+}
+
+@media screen and (max-width: 480px) {
+
+  #physics-selection-container {
+    width: 80px;
+    left: calc(100% - 83px);
+    font-size: 9px;
+  }
+
+  #restart {
+    width: 50px;
+    height: 18px;
+    font-size: 9px;
+    left: calc(100% - 67px);
+  }
+
+  #blockNum {
+    width: 80px;
+    font-size: 11px;
+    left: calc(100% - 82px);
+  }
+
+  select {
+    left: calc(100% - 65px);
+    width: 45px;
+    height: 18px;
+  }
+
+}
