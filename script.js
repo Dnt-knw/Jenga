@@ -1,7 +1,10 @@
   window.onload = setTimeout(main, 250);
 
   function main() {
-    let numberOfBlocks = 36, progress = 0, total = 93, stats, text = 'Normal interaction';
+    let numberOfBlocks = 36,
+      progress = 0,
+      total = 93,
+      stats, text = 'Normal interaction';
 
     const canvas = document.getElementById('c');
     const physicsSelectionContainer = document.getElementById('physics-selection-container');
@@ -12,7 +15,7 @@
 
     const meshes = [];
     const bodies = [];
-    const fixedTimeStep = 1/60;
+    const fixedTimeStep = 1 / 60;
 
     stats = new Stats();
 
@@ -21,8 +24,11 @@
     const w = window.innerWidth;
     const h = window.innerHeight;
 
-    const renderer = new THREE.WebGLRenderer({canvas, antialias: true});
-    renderer.setSize(w,h);
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true
+    });
+    renderer.setSize(w, h);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.physicallyCorrectLights = true;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -31,45 +37,45 @@
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     const fov = 75;
-    const aspect = w/h;
+    const aspect = w / h;
     const near = 0.1;
     const far = 100;
 
-    const camera = new THREE.PerspectiveCamera(fov,aspect,near,far);
+    const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.set(0, 10, 20);
     camera.lookAt(0, 0, 0);
 
     const scene = new THREE.Scene();
 
-  	const color = 0xFFFFFF;
-  	const intensity = 50;
+    const color = 0xFFFFFF;
+    const intensity = 50;
 
-  	const light = new THREE.SpotLight(color, intensity);
-  	light.position.set(-20, 25, 15);
-  	light.target.position.set(0, 0, 0);
-  	light.shadow.mapSize.x = light.shadow.mapSize.y = 2048;
-  	light.castShadow = light.receiveShadow = true;
-  	light.penumbra = 1;
-  	light.angle = 1;
+    const light = new THREE.SpotLight(color, intensity);
+    light.position.set(-20, 25, 15);
+    light.target.position.set(0, 0, 0);
+    light.shadow.mapSize.x = light.shadow.mapSize.y = 2048;
+    light.castShadow = light.receiveShadow = true;
+    light.penumbra = 1;
+    light.angle = 1;
 
-  	const updateCamera = () => {
-  	  light.target.updateMatrixWorld();
-  	  light.shadow.camera.updateProjectionMatrix();
-  	}
+    const updateCamera = () => {
+      light.target.updateMatrixWorld();
+      light.shadow.camera.updateProjectionMatrix();
+    }
 
-  	updateCamera();
+    updateCamera();
 
     scene.add(light, new THREE.AmbientLight(0xFFFFFF, .3));
 
     const addMesh = (geo, mat, rX, rY, rZ, x, y, z, receiveShadow = true, castShadow = true) => {
-  	  const mesh = new THREE.Mesh(geo,mat);
-  	  mesh.rotation.set(rX, rY, rZ);
-  	  mesh.position.set(x, y, z);
-  	  mesh.castShadow = castShadow;
-  	  mesh.receiveShadow = receiveShadow;
-  	  scene.add(mesh);
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.rotation.set(rX, rY, rZ);
+      mesh.position.set(x, y, z);
+      mesh.castShadow = castShadow;
+      mesh.receiveShadow = receiveShadow;
+      scene.add(mesh);
       progress++;
-  	  return mesh;
+      return mesh;
     };
 
     const radiusTop = 10;
@@ -78,68 +84,97 @@
     const radialSegments = 48;
 
     const tableTex = new THREE.TextureLoader().load('https://dl.dropbox.com/s/o08jctfuo1u7fx7/marble.jpg', t => {
-  	  t.wrapS = t.wrapT = THREE.RepeatWrapping;
-  	  t.repeat.set(15,1);
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(15, 1);
       progress++;
     });
 
     const floorTex = new THREE.TextureLoader().load('https://dl.dropbox.com/s/6uci00nf83wgsb5/floor.jpg', t => {
-  	  t.wrapS = t.wrapT = THREE.RepeatWrapping;
-  	  t.repeat.set(5,5);
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(5, 5);
       progress++;
     });
 
-    const tableMaterials = [new THREE.MeshPhongMaterial({map: tableTex})];
+    const tableMaterials = [new THREE.MeshPhongMaterial({
+      map: tableTex
+    })];
 
     const wallTex = new THREE.TextureLoader().load('https://dl.dropbox.com/s/bo59g6p4h6l9j5r/wall.jpg', t => {
-  	  t.wrapS = t.wrapT = THREE.RepeatWrapping;
-  	  t.repeat.set(4, 4);
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(4, 4);
       progress++;
     });
 
     const cubeMaterials = [
-  	  new THREE.MeshPhongMaterial({map: wallTex, side: THREE.BackSide, shininess: 60}),
-  	  new THREE.MeshPhongMaterial({map: wallTex, side: THREE.BackSide, shininess: 60}),
-  	  new THREE.MeshPhongMaterial({color: 0xF2F2F2, side: THREE.BackSide, shininess: 60}),
-  	  new THREE.MeshBasicMaterial({visible: false}),
-  	  new THREE.MeshPhongMaterial({map: wallTex, side: THREE.BackSide, shininess: 60}),
-  	  new THREE.MeshPhongMaterial({map: wallTex, side: THREE.BackSide, shininess: 60}),
+      new THREE.MeshPhongMaterial({
+        map: wallTex,
+        side: THREE.BackSide,
+        shininess: 60
+      }),
+      new THREE.MeshPhongMaterial({
+        map: wallTex,
+        side: THREE.BackSide,
+        shininess: 60
+      }),
+      new THREE.MeshPhongMaterial({
+        color: 0xF2F2F2,
+        side: THREE.BackSide,
+        shininess: 60
+      }),
+      new THREE.MeshBasicMaterial({
+        visible: false
+      }),
+      new THREE.MeshPhongMaterial({
+        map: wallTex,
+        side: THREE.BackSide,
+        shininess: 60
+      }),
+      new THREE.MeshPhongMaterial({
+        map: wallTex,
+        side: THREE.BackSide,
+        shininess: 60
+      }),
     ];
 
-    const plane = addMesh(new THREE.PlaneBufferGeometry(100, 100), new THREE.MeshStandardMaterial({map: floorTex, side: THREE.FrontSide, roughness: .03, metalness: .2}), 0, 0, 0, 0, -10, 0, true, false);
-    plane.quaternion.setFromAxisAngle(new THREE.Vector3(1,0,0), -PI / 2);
+    const plane = addMesh(new THREE.PlaneBufferGeometry(100, 100), new THREE.MeshStandardMaterial({
+      map: floorTex,
+      side: THREE.FrontSide,
+      roughness: .03,
+      metalness: .2
+    }), 0, 0, 0, 0, -10, 0, true, false);
+    plane.quaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -PI / 2);
 
     const addReflector = (geometry, x, y, z, rX, rY, rZ) => {
-  	  const mirror = new THREE.Reflector( geometry, {
-  	    textureWidth: window.innerWidth * window.devicePixelRatio,
-  	    textureHeight: window.innerHeight * window.devicePixelRatio,
-  	    color: 0x777777,
-  	  } );
+      const mirror = new THREE.Reflector(geometry, {
+        textureWidth: window.innerWidth * window.devicePixelRatio,
+        textureHeight: window.innerHeight * window.devicePixelRatio,
+        color: 0x777777,
+      });
 
-  	  mirror.getRenderTarget().texture.anisotropy = 8;
-  	  mirror.position.set(x,y,z);
-  	  mirror.rotation.set(rX,rY,rZ);
-  	  mirror.castShadow = true;
-  	  scene.add(mirror);
+      mirror.getRenderTarget().texture.anisotropy = 8;
+      mirror.position.set(x, y, z);
+      mirror.rotation.set(rX, rY, rZ);
+      mirror.castShadow = true;
+      scene.add(mirror);
       progress++;
-  	  return mirror;
+      return mirror;
     };
 
-    addReflector(new THREE.CircleBufferGeometry( radiusTop, radialSegments ), 0, 0.5, 0, -PI/2, 0, 0);
+    addReflector(new THREE.CircleBufferGeometry(radiusTop, radialSegments), 0, 0.5, 0, -PI / 2, 0, 0);
 
     const blockTextures = [
-  	  new THREE.TextureLoader().load('https://dl.dropbox.com/s/vw2k1q29xykghwd/block_texture_1.jpg'),
-  	  new THREE.TextureLoader().load('https://dl.dropbox.com/s/kzbtypch9ecgpdm/block_texture_2.jpg'),
-  	  new THREE.TextureLoader().load('https://dl.dropbox.com/s/96sgj3s3nv7hw0v/block_texture_3.jpg'),
-  	  new THREE.TextureLoader().load('https://dl.dropbox.com/s/bgiic34gup89r9b/block_texture_4.jpg'),
+      new THREE.TextureLoader().load('https://dl.dropbox.com/s/vw2k1q29xykghwd/block_texture_1.jpg'),
+      new THREE.TextureLoader().load('https://dl.dropbox.com/s/kzbtypch9ecgpdm/block_texture_2.jpg'),
+      new THREE.TextureLoader().load('https://dl.dropbox.com/s/96sgj3s3nv7hw0v/block_texture_3.jpg'),
+      new THREE.TextureLoader().load('https://dl.dropbox.com/s/bgiic34gup89r9b/block_texture_4.jpg'),
     ];
 
     const onWindowResize = () => {
-  	  const w = window.innerWidth;
-  	  const h = window.innerHeight;
-  	  renderer.setSize( w, h );
-  	  camera.aspect = w / h;
-  	  camera.updateProjectionMatrix();
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
     };
 
     window.addEventListener('resize', onWindowResize);
@@ -156,43 +191,71 @@
     world.broadphase = new CANNON.NaiveBroadphase();
 
     const addBody = (mass, position, shape) => {
-  	  const body = new CANNON.Body({mass, position, shape});
+      const body = new CANNON.Body({
+        mass,
+        position,
+        shape
+      });
       body.allowSleep = true;
-  	  world.add(body);
+      world.add(body);
       progress++;
-  	  return body;
+      return body;
     };
 
     const groundBody = addBody(0, new CANNON.Vec3(0, -9.97, 0), new CANNON.Plane());
-    groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0), -PI/2);
+    groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -PI / 2);
 
-    const tableBody = addBody(0, new CANNON.Vec3(0, -.5, 0), new CANNON.Cylinder(radiusTop, radiusBottom, 2*height, radialSegments));
-    tableBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0), -PI/2);
+    const tableBody = addBody(0, new CANNON.Vec3(0, -.5, 0), new CANNON.Cylinder(radiusTop, radiusBottom, 2 * height, radialSegments));
+    tableBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -PI / 2);
 
     addMesh(new THREE.BoxBufferGeometry(100, 100, 100), cubeMaterials, 0, 0, 0, 0, 40, 0);
     addMesh(new THREE.CylinderBufferGeometry(radiusTop, radiusBottom, height, radialSegments), tableMaterials, 0, 0, 0, 0, 0, 0);
 
-    addMesh(new THREE.BoxBufferGeometry(.2, 9.5, .2), new THREE.MeshStandardMaterial({color: 0x272727, roughness: 0, metalness: .25}), 0, 0, 0, -9.9, -5.25, 0);
+    addMesh(new THREE.BoxBufferGeometry(.2, 9.5, .2), new THREE.MeshStandardMaterial({
+      color: 0x272727,
+      roughness: 0,
+      metalness: .25
+    }), 0, 0, 0, -9.9, -5.25, 0);
     addBody(0, new CANNON.Vec3(-9.9, -5.25, 0), new CANNON.Box(new CANNON.Vec3(.1, 4.75, .1)));
 
-    addMesh(new THREE.BoxBufferGeometry(.2, 9.5, .2), new THREE.MeshStandardMaterial({color: 0x272727, roughness: 0, metalness: .25}), 0, 0, 0, 9.9, -5.25, 0);
+    addMesh(new THREE.BoxBufferGeometry(.2, 9.5, .2), new THREE.MeshStandardMaterial({
+      color: 0x272727,
+      roughness: 0,
+      metalness: .25
+    }), 0, 0, 0, 9.9, -5.25, 0);
     addBody(0, new CANNON.Vec3(9.9, -5.25, 0), new CANNON.Box(new CANNON.Vec3(.1, 4.75, .1)));
 
-    addMesh(new THREE.BoxBufferGeometry(19.6, .2, .2), new THREE.MeshStandardMaterial({color: 0x272727, roughness: 0, metalness: .25}), 0, 0, 0, 0, -9.9, 0);
+    addMesh(new THREE.BoxBufferGeometry(19.6, .2, .2), new THREE.MeshStandardMaterial({
+      color: 0x272727,
+      roughness: 0,
+      metalness: .25
+    }), 0, 0, 0, 0, -9.9, 0);
     addBody(0, new CANNON.Vec3(0, -9.9, 0), new CANNON.Box(new CANNON.Vec3(9.8, .1, .1)));
 
-    addMesh(new THREE.BoxBufferGeometry(.2, 9.5, .2), new THREE.MeshStandardMaterial({color: 0x272727, roughness: 0, metalness: .25}), 0, 0, 0, 0, -5.25, -9.9);
+    addMesh(new THREE.BoxBufferGeometry(.2, 9.5, .2), new THREE.MeshStandardMaterial({
+      color: 0x272727,
+      roughness: 0,
+      metalness: .25
+    }), 0, 0, 0, 0, -5.25, -9.9);
     addBody(0, new CANNON.Vec3(0, -5.25, -9.9), new CANNON.Box(new CANNON.Vec3(.1, 4.75, .1)));
 
-    addMesh(new THREE.BoxBufferGeometry(.2, 9.5, .2), new THREE.MeshStandardMaterial({color: 0x272727, roughness: 0, metalness: .25}), 0, 0, 0, 0, -5.25, 9.9);
+    addMesh(new THREE.BoxBufferGeometry(.2, 9.5, .2), new THREE.MeshStandardMaterial({
+      color: 0x272727,
+      roughness: 0,
+      metalness: .25
+    }), 0, 0, 0, 0, -5.25, 9.9);
     addBody(0, new CANNON.Vec3(0, -5.25, 9.9), new CANNON.Box(new CANNON.Vec3(.1, 4.75, .1)));
 
-    addMesh(new THREE.BoxBufferGeometry(.2, .2, 19.6), new THREE.MeshStandardMaterial({color: 0x272727, roughness: 0, metalness: .25}), 0, 0, 0, 0, -9.9, 0);
+    addMesh(new THREE.BoxBufferGeometry(.2, .2, 19.6), new THREE.MeshStandardMaterial({
+      color: 0x272727,
+      roughness: 0,
+      metalness: .25
+    }), 0, 0, 0, 0, -9.9, 0);
     addBody(0, new CANNON.Vec3(0, -9.9, 0), new CANNON.Box(new CANNON.Vec3(.1, .1, 9.8)));
 
     const render = () => {
-  	  stats.update();
-  	  renderer.render(scene, camera);
+      stats.update();
+      renderer.render(scene, camera);
     };
 
     const addJengaBlocks = () => {
@@ -200,13 +263,16 @@
       let y = .7;
       let z = 0;
 
-      for(let i = 0; i < numberOfBlocks/2; i++) {
+      for (let i = 0; i < numberOfBlocks / 2; i++) {
         if (i % 3 === 0 && i) {
           y += .81;
           x = -1.01;
         }
 
-        meshes.push(addMesh(new THREE.BoxBufferGeometry(1, .4, 3), new THREE.MeshPhongMaterial({map: blockTextures[Math.floor(blockTextures.length * Math.random())], shininess: 45}), 0, 0, 0, x, y, z));
+        meshes.push(addMesh(new THREE.BoxBufferGeometry(1, .4, 3), new THREE.MeshPhongMaterial({
+          map: blockTextures[Math.floor(blockTextures.length * Math.random())],
+          shininess: 45
+        }), 0, 0, 0, x, y, z));
         const body = addBody(1, new CANNON.Vec3(x, y, z), new CANNON.Box(new CANNON.Vec3(.5, .2, 1.5)));
         bodies.push(body);
         x += 1.01;
@@ -216,15 +282,18 @@
       y = 1.11;
       z = 1.01;
 
-      for(let i = 0; i < numberOfBlocks/2; i++) {
+      for (let i = 0; i < numberOfBlocks / 2; i++) {
         if (i % 3 === 0 && i) {
           y += .81;
           z = 1.01;
         }
 
-        meshes.push(addMesh(new THREE.BoxBufferGeometry(1, .4, 3), new THREE.MeshPhongMaterial({map: blockTextures[Math.floor(blockTextures.length * Math.random())], shininess: 45}), 0, PI/2, 0, x, y, z));
+        meshes.push(addMesh(new THREE.BoxBufferGeometry(1, .4, 3), new THREE.MeshPhongMaterial({
+          map: blockTextures[Math.floor(blockTextures.length * Math.random())],
+          shininess: 45
+        }), 0, PI / 2, 0, x, y, z));
         const body = addBody(1, new CANNON.Vec3(x, y, z), new CANNON.Box(new CANNON.Vec3(.5, .2, 1.5)));
-        body.quaternion.setFromAxisAngle(new CANNON.Vec3(0,1,0), -PI/2);
+        body.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -PI / 2);
         bodies.push(body);
         z -= 1.01;
       }
@@ -235,22 +304,22 @@
     let pickedUUID = null;
 
     const updatePhysics = () => {
-  	  world.step(fixedTimeStep);
-  	    for(let i = 0; i < meshes.length; i++) {
-          if (text.includes('High') && picked && dragStart) {
-            world.defaultContactMaterial.contactEquationRelaxation = 1;
-          } else {
-            world.defaultContactMaterial.contactEquationRelaxation = text.includes('Low') ? 16 : 4;
-          }
-          if (dragStart) bodies[i].wakeUp();
-  	      if (pickedUUID === meshes[i].uuid && dragStart) {
-  		      bodies[i].quaternion.copy(meshes[i].quaternion);
-  		      bodies[i].position.copy(meshes[i].position);
-  	     }
+      world.step(fixedTimeStep);
+      for (let i = 0; i < meshes.length; i++) {
+        if (text.includes('High') && picked && dragStart) {
+          world.defaultContactMaterial.contactEquationRelaxation = 1;
+        } else {
+          world.defaultContactMaterial.contactEquationRelaxation = text.includes('Low') ? 16 : 4;
+        }
+        if (dragStart) bodies[i].wakeUp();
+        if (pickedUUID === meshes[i].uuid && dragStart) {
+          bodies[i].quaternion.copy(meshes[i].quaternion);
+          bodies[i].position.copy(meshes[i].position);
+        }
 
-  	  meshes[i].position.copy(bodies[i].position);
-  	  meshes[i].quaternion.copy(bodies[i].quaternion);
-  	  }
+        meshes[i].position.copy(bodies[i].position);
+        meshes[i].quaternion.copy(bodies[i].quaternion);
+      }
     };
 
     const cameraPole = new THREE.Object3D();
@@ -263,87 +332,90 @@
     let picked = false;
 
     const pick = (normalizedPosition, scene, camera, time) => {
-  	  if (dragStart) return;
+      if (dragStart) return;
 
-  	  if (pickedObject) {
+      if (pickedObject) {
         picked = true;
-  	    pickedObject.material.emissive.setHex(pickedObjectSavedColor);
-  	    pickedObject = undefined;
-  	  }
+        pickedObject.material.emissive.setHex(pickedObjectSavedColor);
+        pickedObject = undefined;
+      }
 
-  	  raycaster.setFromCamera(normalizedPosition, camera);
-  	  const intersectedObjects = raycaster.intersectObjects([...meshes]);
-  	  if (intersectedObjects.length) {
-  	    pickedObject = intersectedObjects[0].object;
-  	    pickedObjectSavedColor = pickedObject.material.emissive.getHex();
-  	    pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
-  	  }
+      raycaster.setFromCamera(normalizedPosition, camera);
+      const intersectedObjects = raycaster.intersectObjects([...meshes]);
+      if (intersectedObjects.length) {
+        pickedObject = intersectedObjects[0].object;
+        pickedObjectSavedColor = pickedObject.material.emissive.getHex();
+        pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
+      }
     };
 
     const clearPickPosition = () => {
-  	  pickPosition.x = -Infinity;
-  	  pickPosition.y = -Infinity;
+      pickPosition.x = -Infinity;
+      pickPosition.y = -Infinity;
     };
 
-    const pickPosition = {x: 0, y: 0};
+    const pickPosition = {
+      x: 0,
+      y: 0
+    };
     clearPickPosition();
 
     const touchScreen = 'ontouchmove' in document;
 
     const getCanvasRelativePosition = e => {
-  	  const rect = canvas.getBoundingClientRect();
+      const rect = canvas.getBoundingClientRect();
 
-  	  if (touchScreen) {
-  	    return {
-  		  x: (e.targetTouches[0].clientX - rect.left) * canvas.width  / rect.width,
-  		  y: (e.targetTouches[0].clientY - rect.top) * canvas.height / rect.height,
-  	    }
-  	  }
+      if (touchScreen) {
+        return {
+          x: (e.targetTouches[0].clientX - rect.left) * canvas.width / rect.width,
+          y: (e.targetTouches[0].clientY - rect.top) * canvas.height / rect.height,
+        }
+      }
 
-  	  return {
-  	    x: (e.clientX - rect.left) * canvas.width  / rect.width,
-  	    y: (e.clientY - rect.top) * canvas.height / rect.height,
-  	  };
+      return {
+        x: (e.clientX - rect.left) * canvas.width / rect.width,
+        y: (e.clientY - rect.top) * canvas.height / rect.height,
+      };
     }
 
     const setPickPosition = e => {
-  	  const pos = getCanvasRelativePosition(e);
-  	  if (pickedObject) pickedUUID = pickedObject.uuid;
-  	  pickPosition.x = (pos.x / canvas.width ) *  2 - 1;
-  	  pickPosition.y = (pos.y / canvas.height) * -2 + 1;
+      const pos = getCanvasRelativePosition(e);
+      if (pickedObject) pickedUUID = pickedObject.uuid;
+      pickPosition.x = (pos.x / canvas.width) * 2 - 1;
+      pickPosition.y = (pos.y / canvas.height) * -2 + 1;
     };
 
     let dragStart = false;
     let dragControls = new THREE.DragControls(meshes, camera, canvas);
 
     if (touchScreen) {
-  	  window.addEventListener('touchstart', setPickPosition);
-  	  window.addEventListener('touchmove', setPickPosition);
-  	  window.addEventListener('touchend', clearPickPosition);
-  	  window.addEventListener('touchcancel', clearPickPosition);
-  	  dragControls.addEventListener('drag', () => dragStart = true);
+      window.addEventListener('touchstart', setPickPosition);
+      window.addEventListener('touchmove', setPickPosition);
+      window.addEventListener('touchend', clearPickPosition);
+      window.addEventListener('touchcancel', clearPickPosition);
+      dragControls.addEventListener('drag', () => dragStart = true);
     } else {
       window.addEventListener('click', setPickPosition);
-  	  window.addEventListener('mousemove', setPickPosition);
-  	  window.addEventListener('mouseover', setPickPosition);
-  	  window.addEventListener('mouseout', clearPickPosition);
-  	  window.addEventListener('mouseleave', clearPickPosition);
-  	  dragControls.addEventListener('dragstart', () => dragStart = true);
+      window.addEventListener('mousemove', setPickPosition);
+      window.addEventListener('mouseover', setPickPosition);
+      window.addEventListener('mouseout', clearPickPosition);
+      window.addEventListener('mouseleave', clearPickPosition);
+      dragControls.addEventListener('dragstart', () => dragStart = true);
     }
 
     dragControls.addEventListener('dragend', () => {
-       dragStart = false;
-       clearPickPosition();
-     });
+      dragStart = false;
+      clearPickPosition();
+    });
 
     const update = time => {
-  	  render();
+      render();
       if (picked) updatePhysics();
-  	  time *= 0.001;
-  	  cameraPole.rotation.y = time * .1;
-  	  pick(pickPosition, scene, camera, time);
+      time *= 0.001;
+      cameraPole.rotation.y = time * .1;
+      pick(pickPosition, scene, camera, time);
 
-  	  requestAnimationFrame(update);
+      requestAnimationFrame(update);
     };
 
     update();
@@ -394,7 +466,7 @@
       numberOfBlocks = +e.target.value;
     }
 
-    const timer = setInterval( () => {
+    const timer = setInterval(() => {
       onIncorrectRendererSize();
       progressElem.style.transform = 'scaleX(' + progress / total + ')';
       if (total === 93 && progress === 93) {
@@ -404,7 +476,7 @@
         setTimeout(() => {
           stats = new Stats();
           document.body.append(stats.dom);
-        } , 1000);
+        }, 1000);
       }
-    } , 0);
+    }, 0);
   }
