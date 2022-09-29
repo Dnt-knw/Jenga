@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+
+    <!--
+	  You can interact with jenga blocks simply by clicking / touching and moving them.
+      The "Restart" button deletes meshes with their bodies and creates new ones.
+      The "BOOM!" button explodes jenga blocks
+	-->
+
+    <!--
+	  Author: ★ Don’t Know ★
+	-->
+
     <title>3D Jenga Tower...</title>
-    <link rel="stylesheet" href="./style.css" />
     <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"
+      src="https://cdnjs.cloudflare.com/ajax/libs/oimo/1.0.9/oimo.min.js"
       charset="utf-8"
     ></script>
-    <script src="https://threejs.org/build/three.min.js"></script>
-    <script src="https://threejs.org/examples/js/controls/DragControls.js"></script>
-    <script src="https://threejs.org/examples/js/libs/stats.min.js"></script>
-    <script src="https://threejs.org/examples/js/objects/Reflector.js"></script>
-    <script src="script.js"></script>
   </head>
   <body>
     <div id="main-container">
       <div class="loading-container">
+        <!-- Icon made by mynamepong from www.flaticon.com -->
         <img
           src="https://dl.dropbox.com/s/aud86zpgwp125n2/jenga.png"
           alt="jenga"
@@ -25,20 +32,391 @@
         <div id="loader">
           <p id="progress"></p>
         </div>
+        <p id="load-description"></p>
+        <p id="loaded-items-number"></p>
       </div>
     </div>
-    <div id="physics-selection-container">
-      <p class="option">Low interaction</p>
-      <p class="option selected">Normal interaction</p>
-      <p class="option">High interaction</p>
-    </div>
-    <button id="restart">Restart</button>
-    <p id="blockNum">Blocks number:</p>
-    <select>
-      <option>24</option>
-      <option selected>36</option>
-      <option>54</option>
-    </select>
     <canvas id="c"></canvas>
+    <button id="boom-btn" type="button" name="button">BOOM!</button>
+    <button id="restart-btn" type="button" name="button">Restart</button>
   </body>
+  <script type="module">
+
+    import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
+	import {DragControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/DragControls.js';
+	import Stats from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/libs/stats.module.js';
+
+	onload = setTimeout(main, 250);
+
+	function main() {
+		let numberOfBlocks = 54,
+			progress = 0,
+			total = 0,
+			stats = new Stats(),
+			tLoader = new THREE.TextureLoader(),
+			pickedUUID = null,
+			pickedObject = null,
+			pickedObjectSavedColor = 0,
+			picked = false,
+			dragStart = false;
+
+		const canvas = document.getElementById('c');
+		const progressElem = document.getElementById('progress');
+		const mainContainer = document.getElementById('main-container');
+		const loadDescription = document.getElementById('load-description');
+		const loadedItemsNumber = document.getElementById('loaded-items-number');
+		const restartBtn = document.getElementById('restart-btn');
+		const boomBtn = document.getElementById('boom-btn');
+
+		const touchScreen = 'ontouchmove' in document;
+
+		const meshes = [];
+		const bodies = [];
+
+		const PI = Math.PI;
+
+		const w = window.innerWidth;
+		const h = window.innerHeight;
+
+		const renderer = new THREE.WebGLRenderer({
+			canvas,
+			antialias: true
+		});
+
+		renderer.setSize(w, h);
+		renderer.setPixelRatio(window.devicePixelRatio);
+		renderer.physicallyCorrectLights = true;
+		renderer.toneMapping = THREE.ACESFilmicToneMapping;
+		renderer.shadowMap.enabled = true;
+		renderer.shadowMapSoft = true;
+		renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+		const raycaster = new THREE.Raycaster();
+
+		const scene = new THREE.Scene();
+
+		const fov = 75;
+		const aspect = w / h;
+		const near = 0.1;
+		const far = 490;
+
+		const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+		camera.position.set(0, 14, 22);
+		camera.lookAt(0, 0, 0);
+
+		const cameraPole = new THREE.Object3D();
+		scene.add(cameraPole);
+		cameraPole.add(camera);
+
+		const color = 0xFFFFFF;
+		const intensity = 100;
+
+		const light = new THREE.SpotLight(color, intensity);
+		light.position.set(-18, 19, 4);
+		light.target.position.set(0, 0, 0);
+		light.shadow.mapSize.x = light.shadow.mapSize.y = 2048;
+		light.castShadow = light.receiveShadow = true;
+		light.penumbra = 1;
+		light.angle = PI / 3;
+
+		const updateCamera = () => {
+			light.target.updateMatrixWorld();
+			light.shadow.camera.updateProjectionMatrix();
+		}
+
+		updateCamera();
+
+		scene.add(light, new THREE.AmbientLight(0xFFFFFF, .4));
+
+		const addMesh = (geo, mat, rX, rY, rZ, x, y, z, receiveShadow = true, castShadow = true) => {
+			const mesh = new THREE.Mesh(geo, mat);
+			mesh.rotation.set(rX, rY, rZ);
+			mesh.position.set(x, y, z);
+			mesh.castShadow = castShadow;
+			mesh.receiveShadow = receiveShadow;
+			scene.add(mesh);
+
+			return mesh;
+		};
+
+		function loadTexture(url, rX = 1, rY = 1) {
+			total++;
+			return tLoader.load(url, t => {
+				t.wrapS = t.wrapT = THREE.MirroredRepeatWrapping;
+				t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+				t.repeat.set(rX, rY);
+				progress++;
+				loadedItemsNumber.textContent = `${progress} of ${total}`;
+				loadDescription.textContent = `${(progress / total * 100).toFixed(0)}%`;
+
+				return t;
+			})
+		}
+
+		const floorTex = loadTexture('https://dl.dropbox.com/s/mok4k1d6wq5nkip/floor_texture.jpg', 40, 40);
+
+		const plane = addMesh(new THREE.PlaneBufferGeometry(500, 500), new THREE.MeshStandardMaterial({
+			map: floorTex,
+			side: THREE.FrontSide,
+			roughness: .03,
+			metalness: .2
+		}), 0, 0, 0, 0, .5, 0, true, false);
+		plane.quaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -PI / 2);
+
+		const blockTextures = [
+			loadTexture('https://dl.dropbox.com/s/vw2k1q29xykghwd/block_texture_1.jpg'),
+			loadTexture('https://dl.dropbox.com/s/kzbtypch9ecgpdm/block_texture_2.jpg'),
+			loadTexture('https://dl.dropbox.com/s/96sgj3s3nv7hw0v/block_texture_3.jpg'),
+			loadTexture('https://dl.dropbox.com/s/bgiic34gup89r9b/block_texture_4.jpg'),
+		];
+
+		const onWindowResize = () => {
+			const w = window.innerWidth;
+			const h = window.innerHeight;
+			renderer.setSize(w, h);
+			camera.aspect = w / h;
+			camera.updateProjectionMatrix();
+		};
+
+		window.addEventListener('resize', onWindowResize);
+
+		const world = new OIMO.World({
+			timestep: 1 / 60,
+			broadphase: 2,
+			iterations: 50,
+			worldscale: 1,
+			random: false,
+			info: false,
+			gravity: [0, -17, 0],
+		});
+
+		const addBody = (type, size, pos, rot, move, restitution = 0) => {
+			const body = world.add({
+				type,
+				size,
+				pos,
+				rot,
+				move,
+				mass: 1,
+				density: 1,
+				friction: 0.35,
+				restitution,
+				belongsTo: 1,
+				collidesWith: 0xffffffff,
+			});
+
+			body.allowSleep = true;
+			body.sleeping = true;
+			return body;
+		};
+
+		const groundBody = addBody('box', [500, 1, 500], [0, 0, 0], [0, 0, 0], false);
+
+		const render = () => {
+			stats.update();
+			renderer.render(scene, camera);
+		};
+
+		const addJengaBlocks = restitution => {
+			let x = -1.01,
+				y = .7,
+				z = 0;
+
+			for (let i = 0; i < numberOfBlocks / 2; i++) {
+				if (i % 3 === 0 && i) {
+					y += .81;
+					x = -1.01;
+				}
+
+				meshes.push(addMesh(new THREE.BoxBufferGeometry(1, .4, 3), new THREE.MeshPhongMaterial({
+					map: blockTextures[Math.floor(blockTextures.length * Math.random())],
+					shininess: 30
+				}), 0, 0, 0, x, y, z));
+				const body = addBody('box', [1, 0.4, 3], [x, y, z], [0, 0, 0], true, restitution);
+				bodies.push(body);
+				x += 1.01;
+			}
+
+			x = 0;
+			y = 1.11;
+			z = 1.01;
+
+			for (let i = 0; i < numberOfBlocks / 2; i++) {
+				if (i % 3 === 0 && i) {
+					y += .81;
+					z = 1.01;
+				}
+
+				meshes.push(addMesh(new THREE.BoxBufferGeometry(1, .4, 3), new THREE.MeshPhongMaterial({
+					map: blockTextures[Math.floor(blockTextures.length * Math.random())],
+					shininess: 30
+				}), 0, PI / 2, 0, x, y, z));
+				const body = addBody('box', [1, 0.4, 3], [x, y, z], [0, 90, 0], true, restitution);
+				bodies.push(body);
+				z -= 1.01;
+			}
+		};
+
+		addJengaBlocks();
+
+		const removeJengaBlocks = () => {
+			meshes.forEach(mesh => {
+				scene.remove(mesh);
+				mesh.geometry.dispose();
+				mesh.material.dispose();
+				mesh = null;
+			});
+
+			bodies.forEach(body => {
+				body.remove();
+				body = null;
+			});
+
+			meshes.splice(0, meshes.length);
+			bodies.splice(0, bodies.length);
+		};
+
+		const updatePhysics = () => {
+			world.step();
+			for (let i = 0; i < meshes.length; i++) {
+				if (pickedUUID === meshes[i].uuid && dragStart) {
+
+					bodies[i].sleep();
+					bodies[i].awake();
+					bodies[i].position.copy(meshes[i].position);
+					bodies[i].quaternion.copy(meshes[i].quaternion);
+					continue;
+
+				}
+
+				meshes[i].position.copy(bodies[i].getPosition());
+				meshes[i].quaternion.copy(bodies[i].getQuaternion());
+			}
+		};
+
+		const pick = (normalizedPosition, scene, camera, time) => {
+			if (dragStart) return;
+
+			if (pickedObject) {
+				picked = true;
+				pickedObject.material.emissive.setHex(pickedObjectSavedColor);
+				pickedObject = undefined;
+			}
+
+			raycaster.setFromCamera(normalizedPosition, camera);
+			const intersectedObjects = raycaster.intersectObjects(meshes);
+			if (intersectedObjects.length) {
+				pickedObject = intersectedObjects[0].object;
+				pickedObjectSavedColor = pickedObject.material.emissive.getHex();
+				pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
+			}
+		};
+
+		const clearPickPosition = () => {
+			pickPosition.x = -Infinity;
+			pickPosition.y = -Infinity;
+		};
+
+		const pickPosition = {
+			x: 0,
+			y: 0
+		};
+		clearPickPosition();
+
+		const getCanvasRelativePosition = e => {
+			const rect = canvas.getBoundingClientRect();
+
+			if (touchScreen) {
+				return {
+					x: (e.targetTouches[0].clientX - rect.left) * canvas.width / rect.width,
+					y: (e.targetTouches[0].clientY - rect.top) * canvas.height / rect.height,
+				}
+			}
+
+			return {
+				x: (e.clientX - rect.left) * canvas.width / rect.width,
+				y: (e.clientY - rect.top) * canvas.height / rect.height,
+			};
+		}
+
+		const setPickPosition = e => {
+			const pos = getCanvasRelativePosition(e);
+			if (pickedObject) pickedUUID = pickedObject.uuid;
+			pickPosition.x = (pos.x / canvas.width) * 2 - 1;
+			pickPosition.y = (pos.y / canvas.height) * -2 + 1;
+		};
+
+		let dragControls = new DragControls(meshes, camera, canvas)
+
+		if (touchScreen) {
+			window.addEventListener('touchstart', setPickPosition);
+			window.addEventListener('touchmove', setPickPosition);
+			window.addEventListener('touchend', clearPickPosition);
+			window.addEventListener('touchcancel', clearPickPosition);
+			dragControls.addEventListener('drag', () => dragStart = true);
+		} else {
+			window.addEventListener('click', setPickPosition);
+			window.addEventListener('mousemove', setPickPosition);
+			window.addEventListener('mouseover', setPickPosition);
+			window.addEventListener('mouseout', clearPickPosition);
+			window.addEventListener('mouseleave', clearPickPosition);
+			dragControls.addEventListener('dragstart', () => dragStart = true);
+		}
+
+		dragControls.addEventListener('dragend', () => {
+			dragStart = false;
+			clearPickPosition();
+		});
+
+		const update = time => {
+			render();
+			if (picked) updatePhysics();
+			time *= 0.001;
+			cameraPole.rotation.y = time * .15;
+			pick(pickPosition, scene, camera, time);
+
+			requestAnimationFrame(update);
+		};
+
+		const onIncorrectRendererSize = () => {
+			const incorrectSize = canvas.width !== window.innerWidth || canvas.height !== window.innerHeight;
+			if (incorrectSize) onWindowResize();
+		};
+
+		restartBtn.addEventListener('click', onRestartBtnClicked);
+		boomBtn.addEventListener('click', onBoomBtnClicked);
+
+		function onBoomBtnClicked() {
+			removeJengaBlocks();
+			addJengaBlocks(0.55);
+			dragControls = new DragControls(meshes, camera, canvas);
+
+			picked = true;
+		}
+
+		function onRestartBtnClicked() {
+			removeJengaBlocks();
+			addJengaBlocks();
+			dragControls = new DragControls(meshes, camera, canvas);
+
+			picked = false;
+		}
+
+		const timer = setInterval(() => {
+			onIncorrectRendererSize();
+			progressElem.style.transform = 'scaleX(' + progress / total + ')';
+			if (total === progress) {
+				clearInterval(timer);
+				update();
+				setTimeout(() => mainContainer.style.opacity = '0', 400);
+				setTimeout(() => mainContainer.remove(), 1000);
+				setTimeout(() => {
+					stats = new Stats();
+					document.body.append(stats.dom);
+				}, 1300);
+			}
+		}, 100);
+	}
+
+  </script>
 </html>
