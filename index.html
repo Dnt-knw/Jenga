@@ -592,38 +592,6 @@
 
     const tableTex = loadTexture('https://dl.dropbox.com/s/o08jctfuo1u7fx7/marble.jpg', 1, 1);
     const floorTex = loadTexture('https://dl.dropbox.com/s/6uci00nf83wgsb5/floor.jpg', 25, 25);
-    const wallTex = loadTexture('https://dl.dropbox.com/s/bo59g6p4h6l9j5r/wall.jpg', 4, 4);
-
-    const cubeMaterials = [
-      new THREE.MeshPhongMaterial({
-        map: wallTex,
-        side: THREE.BackSide,
-        shininess: 60
-      }),
-      new THREE.MeshPhongMaterial({
-        map: wallTex,
-        side: THREE.BackSide,
-        shininess: 60
-      }),
-      new THREE.MeshPhongMaterial({
-        color: 0xF2F2F2,
-        side: THREE.BackSide,
-        shininess: 60
-      }),
-      new THREE.MeshBasicMaterial({
-        visible: false
-      }),
-      new THREE.MeshPhongMaterial({
-        map: wallTex,
-        side: THREE.BackSide,
-        shininess: 60
-      }),
-      new THREE.MeshPhongMaterial({
-        map: wallTex,
-        side: THREE.BackSide,
-        shininess: 60
-      }),
-    ];
 
     const plane = addMesh(new THREE.PlaneBufferGeometry(500, 500), new THREE.MeshStandardMaterial({
       map: floorTex,
