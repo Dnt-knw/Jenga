@@ -31,10 +31,10 @@
         <h3 id="select-engine-title">Select a physics engine</h3>
         <div id="select-engine-btn-container">
           <button class="cannon select-engine-btn">
-            Cannon.js (high resource requirements)
+            Cannon.js physics engine
           </button>
           <button class="oimo select-engine-btn">
-            Oimo.js (medium resource requirements)
+            Oimo.js physics engine
           </button>
         </div>
       </div>
@@ -148,7 +148,7 @@
     const light = new THREE.SpotLight(color, intensity);
     light.position.set(-18, 19, 4);
     light.target.position.set(0, 0, 0);
-    light.shadow.mapSize.x = light.shadow.mapSize.y = 1024;
+    light.shadow.mapSize.x = light.shadow.mapSize.y = 2048;
     light.castShadow = light.receiveShadow = true;
     light.penumbra = 1;
     light.angle = PI / 3;
@@ -215,8 +215,8 @@
 
     const world = new OIMO.World({
       timestep: 1 / 60,
-      broadphase: 3,
-      iterations: 50,
+      broadphase: 2,
+      iterations: 30,
       worldscale: 1,
       random: false,
       info: false,
@@ -235,7 +235,7 @@
         friction: 0.35,
         restitution,
         belongsTo: 2,
-        collidesWith: 0xffffffff,
+        collidesWith: 0xffffff,
       });
 
       body.allowSleep = true;
@@ -440,11 +440,11 @@
           bodies.forEach(body => {
             body.shapes.restitution = 0;
           });
-        }, delay * 120);
+        }, delay * 90);
         noNeedToUpdate = true;
       }
 
-      const random = randomFromInterval(40, 80);
+      const random = randomFromInterval(45, 75);
 
       removeJengaBlocks();
       addJengaBlocks(random);
@@ -454,7 +454,7 @@
           bodies.forEach(body => {
             body.shapes.restitution = 0;
           });
-        }, delay * 120);
+        }, delay * 90);
       }
 
       dragControls = new DragControls(meshes, camera, canvas);
@@ -476,12 +476,12 @@
       if (total === progress) {
         clearInterval(timer);
         update();
-        setTimeout(() => mainContainer.style.opacity = '0', 400);
-        setTimeout(() => mainContainer.remove(), 1000);
+        setTimeout(() => mainContainer.style.opacity = '0', 600);
+        setTimeout(() => mainContainer.remove(), 1200);
         setTimeout(() => {
           stats = new Stats();
           document.body.append(stats.dom);
-        }, 1300);
+        }, 1500);
       }
     }, 100);
   }
@@ -934,12 +934,12 @@
       progressElem.style.transform = 'scaleX(' + progress / total + ')';
       if (total === progress) {
         clearInterval(timer);
-        setTimeout(() => mainContainer.style.opacity = '0', 400);
-        setTimeout(() => mainContainer.remove(), 1000);
+        setTimeout(() => mainContainer.style.opacity = '0', 600);
+        setTimeout(() => mainContainer.remove(), 1200);
         setTimeout(() => {
           stats = new Stats();
           document.body.append(stats.dom);
-        }, 1300);
+        }, 1500);
       }
     }, 100);
   }
