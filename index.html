@@ -216,7 +216,7 @@
     const world = new OIMO.World({
       timestep: 1 / 60,
       broadphase: 2,
-      iterations: 30,
+      iterations: 35,
       worldscale: 1,
       random: false,
       info: false,
@@ -315,7 +315,6 @@
         if (pickedUUID === meshes[i].uuid && dragStart) {
 
           bodies[i].sleep();
-          bodies[i].awake();
           bodies[i].position.copy(meshes[i].position);
           bodies[i].quaternion.copy(meshes[i].quaternion);
           continue;
@@ -891,7 +890,7 @@
       }
 
       onRestartBtnClicked(e);
-      const random = randomFromInterval(7, 12);
+      const random = randomFromInterval(8, 12);
 
       world.defaultContactMaterial.contactEquationRelaxation = random;
 
