@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="style.css">
 
     <!--
         You can interact with jenga blocks simply by clicking / touching and moving them.
@@ -216,7 +216,7 @@
     const world = new OIMO.World({
       timestep: 1 / 60,
       broadphase: 2,
-      iterations: 35,
+      iterations: 30,
       worldscale: 1,
       random: false,
       info: false,
@@ -443,7 +443,7 @@
         noNeedToUpdate = true;
       }
 
-      const random = randomFromInterval(45, 75);
+      const random = randomFromInterval(63, 66);
 
       removeJengaBlocks();
       addJengaBlocks(random);
@@ -634,7 +634,7 @@
     world.defaultContactMaterial.contactEquationStiffness = 5e3;
     world.defaultContactMaterial.contactEquationRelaxation = 4;
     world.gravity.set(0, -20, 0);
-    world.broadphase = new CANNON.NaiveBroadphase();
+    world.broadphase = new CANNON.SAPBroadphase(world);
 
     const addBody = (mass, position, shape) => {
       const body = new CANNON.Body({
@@ -890,7 +890,7 @@
       }
 
       onRestartBtnClicked(e);
-      const random = randomFromInterval(8, 12);
+      const random = randomFromInterval(10, 12);
 
       world.defaultContactMaterial.contactEquationRelaxation = random;
 
