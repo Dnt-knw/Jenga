@@ -61,7 +61,7 @@
   import {DragControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/DragControls.js';
   import Stats from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/libs/stats.module.js';
 
-  onload = setTimeout(preload, 250);
+  onload = preload;
 
   function preload() {
     const engineSelectionMainContainer = document.getElementById('engine-selection-main-container');
@@ -69,13 +69,13 @@
 
     const onContainerClicked = e => {
       if (e.target.classList.contains('cannon')) {
-        startCANNON();
+        setTimeout(startCANNON, 250);
         startOIMO = undefined;
         engineSelectionMainContainer.remove();
       }
 
       if (e.target.classList.contains('oimo')) {
-        startOIMO();
+        setTimeout(startOIMO, 250);
         startCANNON = undefined;
         engineSelectionMainContainer.remove();
       }
