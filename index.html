@@ -143,16 +143,15 @@
     cameraPole.add(camera);
 
     const color = 0xFFFFFF;
-    const intensity = 100;
+    const intensity = 105;
 
     const light = new THREE.SpotLight(color, intensity);
-    light.position.set(-18, 19, 4);
+    light.position.set(-22, 19, 4);
     light.target.position.set(0, 0, 0);
     light.shadow.mapSize.x = light.shadow.mapSize.y = 1024;
     light.castShadow = light.receiveShadow = true;
     light.penumbra = 1;
-    light.angle = PI / 3;
-    light.shadow.bias = -0.0000001;
+    light.angle = PI / 4;
     light.shadow.normalBias = 0.099;
 
     const updateCamera = () => {
@@ -535,7 +534,7 @@
     const scene = new THREE.Scene();
 
     const color = 0xFFFFFF;
-    const intensity = 40;
+    const intensity = 50;
 
     const light = new THREE.SpotLight(color, intensity);
     light.position.set(-20, 25, 15);
@@ -543,8 +542,7 @@
     light.shadow.mapSize.x = light.shadow.mapSize.y = 1024;
     light.castShadow = light.receiveShadow = true;
     light.penumbra = 1;
-    light.angle = PI / 3;
-    light.shadow.bias = -0.0000001;
+    light.angle = PI / 4;
     light.shadow.normalBias = 0.099;
 
     const updateCamera = () => {
@@ -554,7 +552,7 @@
 
     updateCamera();
 
-    const light2 = new THREE.SpotLight(color, 20);
+    const light2 = new THREE.SpotLight(color, 25);
     light2.position.set(20, 25, -15);
     light2.target.position.set(0, 0, 0);
     light2.penumbra = 1;
@@ -576,7 +574,7 @@
     const radiusTop = 10;
     const radiusBottom = 10;
     const height = 1;
-    const radialSegments = 48;
+    const radialSegments = 56;
 
     let tLoader = new THREE.TextureLoader();
 
@@ -606,7 +604,7 @@
     const table = addMesh(
       new THREE.CylinderBufferGeometry(radiusTop, radiusBottom, height, radialSegments),
       [new THREE.MeshStandardMaterial({
-        color: 0x787878
+        color: 0x333333
       }), new THREE.MeshPhongMaterial({
         map: tableTex,
         color: 0x555555
@@ -661,44 +659,44 @@
     tableBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -PI / 2);
 
     addMesh(new THREE.BoxBufferGeometry(.2, 9.5, .2), new THREE.MeshStandardMaterial({
-      color: 0x272727,
+      color: 0x111111,
       roughness: 0,
-      metalness: .25
+      metalness: .1
     }), 0, 0, 0, -9.9, -5.25, 0, false, false);
     addBody(0, new CANNON.Vec3(-9.9, -5.25, 0), new CANNON.Box(new CANNON.Vec3(.1, 4.75, .1)));
 
     addMesh(new THREE.BoxBufferGeometry(.2, 9.5, .2), new THREE.MeshStandardMaterial({
-      color: 0x272727,
+      color: 0x111111,
       roughness: 0,
-      metalness: .25
+      metalness: .1
     }), 0, 0, 0, 9.9, -5.25, 0, false, false);
     addBody(0, new CANNON.Vec3(9.9, -5.25, 0), new CANNON.Box(new CANNON.Vec3(.1, 4.75, .1)));
 
     addMesh(new THREE.BoxBufferGeometry(19.6, .2, .2), new THREE.MeshStandardMaterial({
-      color: 0x272727,
+      color: 0x111111,
       roughness: 0,
-      metalness: .25
+      metalness: .1
     }), 0, 0, 0, 0, -9.9, 0, false, false);
     addBody(0, new CANNON.Vec3(0, -9.9, 0), new CANNON.Box(new CANNON.Vec3(9.8, .1, .1)));
 
     addMesh(new THREE.BoxBufferGeometry(.2, 9.5, .2), new THREE.MeshStandardMaterial({
-      color: 0x272727,
+      color: 0x111111,
       roughness: 0,
-      metalness: .25
+      metalness: .1
     }), 0, 0, 0, 0, -5.25, -9.9, false, false);
     addBody(0, new CANNON.Vec3(0, -5.25, -9.9), new CANNON.Box(new CANNON.Vec3(.1, 4.75, .1)));
 
     addMesh(new THREE.BoxBufferGeometry(.2, 9.5, .2), new THREE.MeshStandardMaterial({
-      color: 0x272727,
+      color: 0x111111,
       roughness: 0,
-      metalness: .25
+      metalness: .1
     }), 0, 0, 0, 0, -5.25, 9.9, false, false);
     addBody(0, new CANNON.Vec3(0, -5.25, 9.9), new CANNON.Box(new CANNON.Vec3(.1, 4.75, .1)));
 
     addMesh(new THREE.BoxBufferGeometry(.2, .2, 19.6), new THREE.MeshStandardMaterial({
-      color: 0x272727,
+      color: 0x111111,
       roughness: 0,
-      metalness: .25
+      metalness: .1
     }), 0, 0, 0, 0, -9.9, 0, false, false);
     addBody(0, new CANNON.Vec3(0, -9.9, 0), new CANNON.Box(new CANNON.Vec3(.1, .1, 9.8)));
 

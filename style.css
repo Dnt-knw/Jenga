@@ -21,17 +21,17 @@ img {
 button {
   position: relative;
   display: block;
-  width: 60px;
-  height: 20px;
+  width: 90px;
+  height: 30px;
   background: #3c3131;
   z-index: 999;
   color: #efefef;
   border-radius: 5px;
-  font-size: 11px;
+  font-size: 12px;
   border: 1px solid gray;
   transition: background-color 300ms ease, border-color 300ms ease;
   cursor: pointer;
-  left: calc(100% - 70px);
+  left: calc(100% - 100px);
   font-family: "Karla", sans-serif;
 }
 
@@ -192,6 +192,13 @@ button:hover {
     font-size: 14px;
     padding: 16px;
   }
+
+  button {
+    width: 75px;
+    height: 25px;
+    left: calc(100% - 85px);
+    font-size: 11px;
+  }  
 }
 
 @media screen and (max-width: 425px) {
@@ -202,6 +209,13 @@ button:hover {
   .select-engine-btn {
     font-size: 12px;
     padding: 12px;
+  }
+
+  button {
+    width: 60px;
+    height: 20px;
+    left: calc(100% - 70px);
+    font-size: 10px;
   }
 }
 
@@ -225,6 +239,13 @@ button:hover {
     font-size: 14px;
     padding: 16px;
   }
+
+  button {
+    width: 75px;
+    height: 25px;
+    left: calc(100% - 85px);
+    font-size: 11px;
+  }    
 }
 
 @media screen and (max-height: 500px) and (min-width: 426px) {
@@ -236,6 +257,13 @@ button:hover {
     font-size: 12px;
     padding: 12px;
   }
+
+  button {
+    width: 60px;
+    height: 20px;
+    left: calc(100% - 70px);
+    font-size: 10px;
+  }  
 }
 
 @media screen and (max-height: 300px) and (min-width: 321px) {
