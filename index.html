@@ -148,11 +148,12 @@
     const light = new THREE.SpotLight(color, intensity);
     light.position.set(-18, 19, 4);
     light.target.position.set(0, 0, 0);
-    light.shadow.mapSize.x = light.shadow.mapSize.y = 2048;
+    light.shadow.mapSize.x = light.shadow.mapSize.y = 1024;
     light.castShadow = light.receiveShadow = true;
     light.penumbra = 1;
     light.angle = PI / 3;
-    light.shadow.bias = -0.00003;
+    light.shadow.bias = -0.0000001;
+    light.shadow.normalBias = 0.099;
 
     const updateCamera = () => {
       light.target.updateMatrixWorld();
@@ -215,12 +216,12 @@
 
     const world = new OIMO.World({
       timestep: 1 / 60,
+      iterations: 15,      
       broadphase: 2,
-      iterations: 30,
       worldscale: 1,
-      random: false,
+      random: true,
       info: false,
-      gravity: [0, -15, 0],
+      gravity: [0, -10, 0],
     });
 
     const addBody = (type, size, pos, rot, move, restitution = 0) => {
@@ -230,16 +231,17 @@
         pos,
         rot,
         move,
-        mass: 1,
-        density: 1,
-        friction: 0.35,
         restitution,
-        belongsTo: 2,
-        collidesWith: 0xffffff,
       });
 
       body.allowSleep = true;
       body.sleeping = true;
+      body.mass = 0.1;
+      body.density = 1;
+      body.friction = 0.01;
+      body.belongsTo = 1;
+      body.collidesWith = 0xffff;
+
       return body;
     };
 
@@ -439,11 +441,11 @@
           bodies.forEach(body => {
             body.shapes.restitution = 0;
           });
-        }, delay * 90);
+        }, delay * 120);
         noNeedToUpdate = true;
       }
 
-      const random = randomFromInterval(63, 66);
+      const random = randomFromInterval(79, 82);
 
       removeJengaBlocks();
       addJengaBlocks(random);
@@ -453,7 +455,7 @@
           bodies.forEach(body => {
             body.shapes.restitution = 0;
           });
-        }, delay * 90);
+        }, delay * 120);
       }
 
       dragControls = new DragControls(meshes, camera, canvas);
@@ -538,11 +540,12 @@
     const light = new THREE.SpotLight(color, intensity);
     light.position.set(-20, 25, 15);
     light.target.position.set(0, 0, 0);
-    light.shadow.mapSize.x = light.shadow.mapSize.y = 2048;
+    light.shadow.mapSize.x = light.shadow.mapSize.y = 1024;
     light.castShadow = light.receiveShadow = true;
     light.penumbra = 1;
     light.angle = 1;
-    light.shadow.bias = -0.00003;
+    light.shadow.bias = -0.0000001;
+    light.shadow.normalBias = 0.099;
 
     const updateCamera = () => {
       light.target.updateMatrixWorld();
