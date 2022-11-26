@@ -411,7 +411,7 @@
       render();
       if (picked) updatePhysics();
       time *= 0.001;
-      cameraPole.rotation.y = time * .15;
+      cameraPole.rotation.y = time * .16;
       pick(pickPosition, scene, camera, time);
 
       requestAnimationFrame(update);
@@ -630,11 +630,14 @@
 
     const world = new CANNON.World();
     world.allowSleep = true;
-    world.solver.iterations = 30;
+    world.solver.iterations = 20;
     world.defaultContactMaterial.contactEquationStiffness = 5e3;
     world.defaultContactMaterial.contactEquationRelaxation = 4;
     world.gravity.set(0, -20, 0);
     world.broadphase = new CANNON.SAPBroadphase(world);
+    world.quatNormalizeFast = true;
+    world.quatNormalizeSkip = 4;
+    world.axisIndex = 1;
 
     const addBody = (mass, position, shape) => {
       const body = new CANNON.Body({
@@ -643,6 +646,7 @@
         shape,
       });
       body.allowSleep = true;
+      body.sleepSpeedLimit = 0.28;
       world.add(body);
       return body;
     };
@@ -715,7 +719,7 @@
           map: blockTextures[Math.floor(blockTextures.length * Math.random())],
           shininess: 45
         }), 0, 0, 0, x, y, z));
-        const body = addBody(1, new CANNON.Vec3(x, y, z), new CANNON.Box(new CANNON.Vec3(.5, .2, 1.5)));
+        const body = addBody(0.01, new CANNON.Vec3(x, y, z), new CANNON.Box(new CANNON.Vec3(.5, .2, 1.5)));
         bodies.push(body);
         x += 1.01;
       }
@@ -734,7 +738,7 @@
           map: blockTextures[Math.floor(blockTextures.length * Math.random())],
           shininess: 45
         }), 0, PI / 2, 0, x, y, z));
-        const body = addBody(1, new CANNON.Vec3(x, y, z), new CANNON.Box(new CANNON.Vec3(.5, .2, 1.5)));
+        const body = addBody(0.01, new CANNON.Vec3(x, y, z), new CANNON.Box(new CANNON.Vec3(.5, .2, 1.5)));
         body.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -PI / 2);
         bodies.push(body);
         z -= 1.01;
@@ -857,7 +861,7 @@
       render();
       if (picked) updatePhysics();
       time *= 0.001;
-      cameraPole.rotation.y = time * .1;
+      cameraPole.rotation.y = time * .12;
       pick(pickPosition, scene, camera, time);
 
       requestAnimationFrame(update);
@@ -890,9 +894,11 @@
       }
 
       onRestartBtnClicked(e);
-      const random = randomFromInterval(10, 12);
+      const random = randomFromInterval(35, 37);
 
       world.defaultContactMaterial.contactEquationRelaxation = random;
+      world.quatNormalizeFast = false;
+      world.quatNormalizeSkip = 0;      
 
       if (!noNeedToUpdate) {
         timeID = setTimeout(() => {
@@ -924,6 +930,8 @@
       dragControls = new DragControls(meshes, camera, canvas);
 
       world.defaultContactMaterial.contactEquationRelaxation = 4;
+      world.quatNormalizeFast = true;
+      world.quatNormalizeSkip = 4;      
 
       picked = false;
     }
