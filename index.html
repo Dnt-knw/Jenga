@@ -231,15 +231,13 @@
         rot,
         move,
         restitution,
+        allowSleep: true,
+        mass: 0.1,
+        density: 0.1,
+        friction: 0.2,
+        belongsTo: 1,
+        collidesWith: 0xffff,
       });
-
-      body.allowSleep = true;
-      body.sleeping = true;
-      body.mass = 0.1;
-      body.density = 1;
-      body.friction = 0.01;
-      body.belongsTo = 1;
-      body.collidesWith = 0xffff;
 
       return body;
     };
