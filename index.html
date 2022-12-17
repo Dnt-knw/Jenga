@@ -65,19 +65,27 @@
 
   function preload() {
     const engineSelectionMainContainer = document.getElementById('engine-selection-main-container');
+    const loadingContainer = document.querySelector('.loading-container');
     const selectEngineBtnContainer = document.getElementById('select-engine-btn-container');
+
+    engineSelectionMainContainer.style.opacity = '1';
+    engineSelectionMainContainer.style.visibility = 'visible';
 
     const onContainerClicked = e => {
       if (e.target.classList.contains('cannon')) {
         setTimeout(startCANNON, 250);
         startOIMO = undefined;
-        engineSelectionMainContainer.remove();
+        loadingContainer.style.opacity = '1';
+        loadingContainer.style.visibility = 'visible';          
+        engineSelectionMainContainer.remove();      
       }
 
       if (e.target.classList.contains('oimo')) {
         setTimeout(startOIMO, 250);
         startCANNON = undefined;
-        engineSelectionMainContainer.remove();
+        loadingContainer.style.opacity = '1';
+        loadingContainer.style.visibility = 'visible';         
+        engineSelectionMainContainer.remove();       
       }
     };
 
@@ -215,7 +223,7 @@
 
     const world = new OIMO.World({
       timestep: 1 / 60,
-      iterations: 15,      
+      iterations: 20,      
       broadphase: 2,
       worldscale: 1,
       random: true,
