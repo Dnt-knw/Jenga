@@ -65,11 +65,12 @@
 
   function preload() {
     const engineSelectionMainContainer = document.getElementById('engine-selection-main-container');
+    const engineSelectionContainer = document.getElementById('engine-selection-container');
     const loadingContainer = document.querySelector('.loading-container');
     const selectEngineBtnContainer = document.getElementById('select-engine-btn-container');
 
-    engineSelectionMainContainer.style.opacity = '1';
-    engineSelectionMainContainer.style.visibility = 'visible';
+    engineSelectionContainer.style.opacity = '1';
+    engineSelectionContainer.style.visibility = 'visible';
 
     const onContainerClicked = e => {
       if (e.target.classList.contains('cannon')) {

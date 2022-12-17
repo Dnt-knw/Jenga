@@ -56,9 +56,6 @@ button:hover {
   height: 100%;
   background: linear-gradient(to top, #000000, #4e4e4e);
   z-index: 99999;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 250ms ease-in;
 }
 
 #engine-selection-container {
@@ -69,6 +66,9 @@ button:hover {
   width: 85%;
   max-width: 480px;
   background: transparent;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 250ms ease-in;  
 }
 
 #select-engine-title {
