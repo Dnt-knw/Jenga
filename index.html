@@ -3,6 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
+    <link rel="icon" href="https://dl.dropbox.com/s/aud86zpgwp125n2/jenga.png" />
     <link rel="stylesheet" type="text/css" href="style.css">
 
     <!--
@@ -15,7 +16,7 @@
         Author: ★ Don’t Know ★
     -->
 
-    <title>3D Jenga Tower...</title>
+    <title>3D Jenga Tower</title>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/oimo/1.0.9/oimo.min.js"
       charset="utf-8"
@@ -56,7 +57,7 @@
     <button id="restart-btn" type="button" name="button">Restart</button>
   </body>
   <script type="module">
-    
+
   import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
   import {DragControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/DragControls.js';
   import Stats from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/libs/stats.module.js';
@@ -77,16 +78,16 @@
         setTimeout(startCANNON, 250);
         startOIMO = undefined;
         loadingContainer.style.opacity = '1';
-        loadingContainer.style.visibility = 'visible';          
-        engineSelectionMainContainer.remove();      
+        loadingContainer.style.visibility = 'visible';
+        engineSelectionMainContainer.remove();
       }
 
       if (e.target.classList.contains('oimo')) {
         setTimeout(startOIMO, 250);
         startCANNON = undefined;
         loadingContainer.style.opacity = '1';
-        loadingContainer.style.visibility = 'visible';         
-        engineSelectionMainContainer.remove();       
+        loadingContainer.style.visibility = 'visible';
+        engineSelectionMainContainer.remove();
       }
     };
 
@@ -224,7 +225,7 @@
 
     const world = new OIMO.World({
       timestep: 1 / 60,
-      iterations: 20,      
+      iterations: 20,
       broadphase: 2,
       worldscale: 1,
       random: true,
@@ -906,7 +907,7 @@
 
       world.defaultContactMaterial.contactEquationRelaxation = random;
       world.quatNormalizeFast = false;
-      world.quatNormalizeSkip = 0;      
+      world.quatNormalizeSkip = 0;
 
       if (!noNeedToUpdate) {
         timeID = setTimeout(() => {
@@ -939,7 +940,7 @@
 
       world.defaultContactMaterial.contactEquationRelaxation = 4;
       world.quatNormalizeFast = true;
-      world.quatNormalizeSkip = 4;      
+      world.quatNormalizeSkip = 4;
 
       picked = false;
     }
