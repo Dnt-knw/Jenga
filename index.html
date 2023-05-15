@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
-    <link rel="icon" href="https://dl.dropbox.com/s/aud86zpgwp125n2/jenga.png" />
+    <link rel="icon" href="./assets/jenga.png" />
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>3D Jenga Tower</title>
     <script
@@ -33,7 +33,7 @@
       <div class="loading-container">
         <!-- Icon made by mynamepong from www.flaticon.com -->
         <img
-          src="https://dl.dropbox.com/s/aud86zpgwp125n2/jenga.png"
+          src="./assets/jenga.png"
           alt="jenga"
         />
         <div id="loader">
@@ -185,7 +185,7 @@
       });
     }
 
-    const floorTex = loadTexture('https://dl.dropbox.com/s/mok4k1d6wq5nkip/floor_texture.jpg', 40, 40);
+    const floorTex = loadTexture('./assets/floor_texture.jpg', 40, 40);
 
     const plane = addMesh(new THREE.PlaneBufferGeometry(500, 500), new THREE.MeshStandardMaterial({
       map: floorTex,
@@ -196,10 +196,10 @@
     plane.quaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -PI / 2);
 
     const blockTextures = [
-      loadTexture('https://dl.dropbox.com/s/vw2k1q29xykghwd/block_texture_1.jpg'),
-      loadTexture('https://dl.dropbox.com/s/kzbtypch9ecgpdm/block_texture_2.jpg'),
-      loadTexture('https://dl.dropbox.com/s/96sgj3s3nv7hw0v/block_texture_3.jpg'),
-      loadTexture('https://dl.dropbox.com/s/bgiic34gup89r9b/block_texture_4.jpg'),
+      loadTexture('./assets/block_texture_1.jpg'),
+      loadTexture('./assets/block_texture_2.jpg'),
+      loadTexture('./assets/block_texture_3.jpg'),
+      loadTexture('./assets/block_texture_4.jpg'),
     ];
 
     const onWindowResize = () => {
@@ -587,8 +587,8 @@
       })
     }
 
-    const tableTex = loadTexture('https://dl.dropbox.com/s/o08jctfuo1u7fx7/marble.jpg', 1, 1);
-    const floorTex = loadTexture('https://dl.dropbox.com/s/6uci00nf83wgsb5/floor.jpg', 25, 25);
+    const tableTex = loadTexture('./assets/marble.jpg', 1, 1);
+    const floorTex = loadTexture('./assets/floor.jpg', 25, 25);
 
     const plane = addMesh(new THREE.PlaneBufferGeometry(500, 500), new THREE.MeshStandardMaterial({
       map: floorTex,
@@ -610,10 +610,10 @@
     );
 
     const blockTextures = [
-      tLoader.load('https://dl.dropbox.com/s/vw2k1q29xykghwd/block_texture_1.jpg'),
-      tLoader.load('https://dl.dropbox.com/s/kzbtypch9ecgpdm/block_texture_2.jpg'),
-      tLoader.load('https://dl.dropbox.com/s/96sgj3s3nv7hw0v/block_texture_3.jpg'),
-      tLoader.load('https://dl.dropbox.com/s/bgiic34gup89r9b/block_texture_4.jpg'),
+      tLoader.load('./assets/block_texture_1.jpg'),
+      tLoader.load('./assets/block_texture_2.jpg'),
+      tLoader.load('./assets/block_texture_3.jpg'),
+      tLoader.load('./assets/block_texture_4.jpg'),
     ];
 
     const onWindowResize = () => {
